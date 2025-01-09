@@ -83,11 +83,17 @@ public_users.get('/title/:title',function (req, res) {
   res.send(ans);
 });
 
-//  Get book review
-public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  const ISBN = req.params.isbn;
-  res.send(books[ISBN].reviews)
+public_users.get('/review/:isbn', function (req, res) {
+  const isbn = req.params.isbn; // Obtén el ISBN de los parámetros de la URL
+  let books = require('./booksdb.js'); // Importa la base de datos de libros
+
+  // Busca el libro por ISBN
+  if (books[isbn]) {
+      const reviews = books[isbn].reviews; // Obtén las reseñas del libro
+      return res.status(200).json({ reviews: reviews }); // Respuesta exitosa con las reseñas
+  } else {
+      return res.status(404).json({ message: "Book not found for the specified ISBN" }); // Respuesta de error
+  }
 });
 
 // Task 10 
